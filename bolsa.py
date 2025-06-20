@@ -137,7 +137,11 @@ def send_email(report: str, recipient: str):
     msg['To'] = recipient
     msg.attach(MIMEText(report, 'plain'))
 
-    smtp_server = os.environ.get('SMTP_SERVER')
+    smtp_server = (
+        os.environ.get('SMTP_SERVER')
+        or os.environ.get('SMTP_HOST')
+        or os.environ.get('SMTP_SERVER_NAME')
+    )
     smtp_user = os.environ.get('SMTP_USER') or os.environ.get('SMTP_USERNAME')
     smtp_pass = os.environ.get('SMTP_PASS') or os.environ.get('SMTP_PASSWORD')
     smtp_port = int(os.environ.get('SMTP_PORT', 465))

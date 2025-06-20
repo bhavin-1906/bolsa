@@ -20,7 +20,8 @@ pip install -r requirements.txt
 
 2. Set environment variables for email sending:
 
-- `SMTP_SERVER` – SMTP server address (required)
+- `SMTP_SERVER` – SMTP server address (required; `SMTP_HOST` or
+  `SMTP_SERVER_NAME` can also be used)
 - `SMTP_PORT` – SMTP port (defaults to `465` for SSL)
 - `SMTP_USER` or `SMTP_USERNAME` – SMTP username (optional)
 - `SMTP_PASS` or `SMTP_PASSWORD` – SMTP password (optional)

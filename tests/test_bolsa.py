@@ -83,3 +83,24 @@ def test_send_email(monkeypatch):
     bolsa.send_email("report", "to@example.com")
     assert hasattr(dummy, "sent")
 
+
+def test_send_email_host_fallback(monkeypatch):
+    class DummySMTP:
+        def __init__(self, *args, **kwargs):
+            pass
+
+        def __enter__(self):
+            return self
+
+        def __exit__(self, exc_type, exc, tb):
+            pass
+
+        def send_message(self, msg: EmailMessage):
+            self.sent = msg
+
+    dummy = DummySMTP()
+    monkeypatch.setattr("smtplib.SMTP_SSL", lambda *a, **kw: dummy)
+    monkeypatch.setenv("SMTP_HOST", "smtp.example.com")
+    bolsa.send_email("report", "to@example.com")
+    assert hasattr(dummy, "sent")
+
