@@ -1,0 +1,1 @@
+Bolsa – finance bot
