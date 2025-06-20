@@ -138,14 +138,16 @@ def send_email(report: str, recipient: str):
     msg.attach(MIMEText(report, 'plain'))
 
     smtp_server = os.environ.get('SMTP_SERVER')
-    smtp_user = os.environ.get('SMTP_USER')
-    smtp_pass = os.environ.get('SMTP_PASS')
-    if not smtp_server or not smtp_user or not smtp_pass:
-        print('SMTP credentials not configured.')
+    smtp_user = os.environ.get('SMTP_USER') or os.environ.get('SMTP_USERNAME')
+    smtp_pass = os.environ.get('SMTP_PASS') or os.environ.get('SMTP_PASSWORD')
+    smtp_port = int(os.environ.get('SMTP_PORT', 465))
+    if not smtp_server:
+        print('SMTP server not configured.')
         return
     try:
-        with smtplib.SMTP_SSL(smtp_server) as server:
-            server.login(smtp_user, smtp_pass)
+        with smtplib.SMTP_SSL(smtp_server, smtp_port) as server:
+            if smtp_user and smtp_pass:
+                server.login(smtp_user, smtp_pass)
             server.send_message(msg)
     except Exception as exc:
         print(f"Failed to send email: {exc}")
